@@ -435,60 +435,6 @@ async def upload_file(
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
-
-# Replace with your Mindee API token (get it from mindee.com)
-MINDEE_API_KEY = "143eccbbf6792455c97a78f0afcd3f5f"
-MINDEE_API_URL = "https://api.mindee.net/v1/products/mindee/ind_passport/v1/predict_async"
-
-@app.post("/extract-passport-data")
-async def extract_passport_data(file: UploadFile = File(...)):
-    """
-    Extract passport data using Mindee OCR API
-    """
-    try:
-        # Send file to Mindee API
-        files = {"document": (file.filename, file.file, file.content_type)}
-        headers = {"Authorization": f"Token {MINDEE_API_KEY}"}
-        
-        response = requests.post(MINDEE_API_URL, files=files, headers=headers)
-        response.raise_for_status()  # Raise error for bad status codes
-        
-        # Extract relevant fields
-        result = response.json()
-        predicted_fields = result["document"]["inference"]["predicted_fields"]
-        
-        # Structure the response
-        passport_data = {
-            "passport_number": predicted_fields["passport_number"]["value"],
-            "surname": predicted_fields["surname"]["value"],
-            "given_names": predicted_fields["given_names"]["value"],
-            "nationality": predicted_fields["nationality"]["value"],
-            "date_of_birth": predicted_fields["birth_date"]["value"],
-            "expiry_date": predicted_fields["expiry_date"]["value"],
-            "sex": predicted_fields["sex"]["value"],
-            "confidence": predicted_fields["mrz"]["confidence"]  # Overall confidence score
-        }
-        
-        return JSONResponse(content=passport_data)
-    
-    except requests.exceptions.RequestException as e:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Mindee API error: {str(e)}"
-        )
-    except KeyError as e:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Failed to parse passport data: {str(e)}"
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Internal server error: {str(e)}"
-        )
-
-
-
 # Mindee Client Initialization
 mindee_client = Client(api_key="143eccbbf6792455c97a78f0afcd3f5f")
 
