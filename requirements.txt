@@ -78,7 +78,7 @@ wsproto==1.2.0
 yarl==1.18.3
 zipp==3.21.0
 python-multipart
-mindee==3.5.1
+mindee==4.23.0
 python-multipart==0.0.9
 requests==2.31.0
 uuid==1.30
