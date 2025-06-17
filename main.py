@@ -483,3 +483,51 @@ async def upload_passport(file: UploadFile = File(...)):
 
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+
+@app.post("/upload-invoice/")
+async def upload_invoice(file: UploadFile = File(...)):
+    try:
+        # Save file temporarily
+        file_ext = file.filename.split(".")[-1]
+        temp_filename = f"{uuid.uuid4()}.{file_ext}"
+        file_path = os.path.join(UPLOAD_DIR, temp_filename)
+
+        # with open(file_path, "wb") as buffer:
+        #     shutil.copyfileobj(file.file, buffer)
+
+        # # Predict using Mindee's Invoice OCR
+        # input_doc = mindee_client.source_from_path(file_path)
+        # result = mindee_client.enqueue_and_parse( product.InvoiceV4, input_doc)
+        # doc = result.document
+
+        # # Extract main fields from the prediction
+        # prediction = doc.inference.pages[0].prediction
+
+        # invoice_data = {
+        #     "invoice_number": getattr(prediction, "invoice_number", {}).get("value"),
+        #     "invoice_date": getattr(prediction, "invoice_date", {}).get("value"),
+        #     "due_date": getattr(prediction, "due_date", {}).get("value"),
+        #     "total_amount": getattr(prediction, "total_amount", {}).get("value"),
+        #     "tax_amount": getattr(prediction, "tax_amount", {}).get("value"),
+        #     "supplier_name": getattr(prediction, "supplier_name", {}).get("value"),
+        #     "billing_address": getattr(prediction, "billing_address", {}).get("value"),
+        #     "customer_address": getattr(prediction, "customer_address", {}).get("value"),
+        #     "category": getattr(prediction, "category", {}).get("value"),
+        #     "line_items": [
+        #         {
+        #             "description": item.get("description", {}).get("value"),
+        #             "quantity": item.get("quantity", {}).get("value"),
+        #             "unit_price": item.get("unit_price", {}).get("value"),
+        #             "total": item.get("total_amount", {}).get("value")
+        #         }
+        #         for item in getattr(prediction, "line_items", [])
+        #     ]
+        # }
+
+        return {"invoice_data": "NO DATA FOUND TO EXTRACT", "status": "success"}
+
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
