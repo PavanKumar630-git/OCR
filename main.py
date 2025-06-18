@@ -996,7 +996,7 @@ async def upload_file(
             }
             
             return response_data
-        else if document_type == 'PASSPORT':
+        elif document_type == 'PASSPORT':
             final_data = upload_passport(file)
         # return {
         #     "ocr_data": parsed_text,
